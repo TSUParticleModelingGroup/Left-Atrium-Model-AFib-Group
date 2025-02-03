@@ -53,7 +53,8 @@ int FrontNode;
 
 int AblateOnOff;
 int EctopicBeatOnOff;
-int AdjustMuscleOnOff;
+int AdjustMuscleAreaOnOff;
+int AdjustMuscleLineOnOff;
 int FindNodeOnOff;
 int EctopicSingleOnOff;
 int MouseFunctionOnOff;
@@ -714,7 +715,23 @@ void terminalPrint()
 	//printf("\n Driving beat node is %d.", EctopicEvents[0].node);
 	printf("\n The beat rate is %f milliseconds.", EctopicEvents[0].period);
 	
-	if(AdjustMuscleOnOff == 1) 
+	if(AdjustMuscleAreaOnOff == 1) 
+	{
+		printf("\n Base muscle contraction multiplier =");
+		printf("\033[0;36m");
+		printf(" %f", BaseMuscleContractionDurationAdjustmentMultiplier);
+		printf("\033[0m");
+		printf("\n Base muscle recharge multiplier =");
+		printf("\033[0;36m");
+		printf(" %f", BaseMuscleRechargeDurationAdjustmentMultiplier);
+		printf("\033[0m");
+		printf("\n Base muscle electrical conduction speed multiplier =");
+		printf("\033[0;36m");
+		printf(" %f", BaseMuscleConductionVelocityAdjustmentMultiplier);
+		printf("\033[0m");
+	}
+	
+	if(AdjustMuscleLineOnOff == 1) 
 	{
 		printf("\n Base muscle contraction multiplier =");
 		printf("\033[0;36m");
@@ -826,8 +843,16 @@ void terminalPrint()
 	}
 	else printf(BOLD_ON "Off" BOLD_OFF);
 	
-	printf("\n $: Muscle Adjustment - ");
-	if (AdjustMuscleOnOff == 1) 
+	printf("\n $: Muscle Adjustment Area - ");
+	if (AdjustMuscleAreaOnOff == 1) 
+	{
+		printf("\033[0;36m");
+		printf(BOLD_ON "On" BOLD_OFF); 
+	}
+	else printf(BOLD_ON "Off" BOLD_OFF);
+	
+	printf("\n $: Muscle Adjustment Line - ");
+	if (AdjustMuscleLineOnOff == 1) 
 	{
 		printf("\033[0;36m");
 		printf(BOLD_ON "On" BOLD_OFF); 
@@ -972,7 +997,8 @@ void setup()
 	
 	AblateOnOff = 0;
 	EctopicBeatOnOff = 0;
-	AdjustMuscleOnOff = 0;
+	AdjustMuscleAreaOnOff = 0;
+	AdjustMuscleLineOnOff = 0;
 	FindNodeOnOff = 0;
 	EctopicSingleOnOff = 0;
 	MouseFunctionOnOff = 0;
