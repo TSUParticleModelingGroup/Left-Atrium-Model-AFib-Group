@@ -1227,148 +1227,159 @@ void mymouse(int button, int state, int x, int y)
 		}
 		else if(button == GLUT_RIGHT_BUTTON) // Right Mouse button down
 		{
-			for(int i = 0; i < NumberOfNodes; i++)
+			if(AdjustMuscleLineOnOff == 1)
 			{
-				dx = MouseX - Node[i].position.x;
-				dy = MouseY - Node[i].position.y;
-				dz = MouseZ - Node[i].position.z;
-				if(sqrt(dx*dx + dy*dy + dz*dz) < hit)
+				int nodeId1 = -1;
+				int nodeId2 = -1;
+				int connectingMuscle = -1;
+				int test = -1;
+				float minDistance = 2.0*RadiusOfAtria;
+				for(int i = 0; i < NumberOfNodes; i++)
 				{
-					if(AblateOnOff == 1)
+					dx = MouseX - Node[i].position.x;
+					dy = MouseY - Node[i].position.y;
+					dz = MouseZ - Node[i].position.z;
+					d = sqrt(dx*dx + dy*dy + dz*dz);
+					if(d < minDistance)
 					{
-						Node[i].ablatedYesNo = 0;
-						Node[i].drawFlag = 0;
-						Node[i].color.x = 0.0;
-						Node[i].color.y = 1.0;
-						Node[i].color.z = 0.0;
+						minDistance = d;
+						nodeId2 = nodeId1;
+						nodeId1 = i;
 					}
-					if(AdjustMuscleAreaOnOff == 1)
+				}
+				
+				if(nodeId2 == -1)
+				{
+					printf("\n Two nodes were not found try again.\n");
+					printf("\n MouseZ = %lf.\n", MouseZ);
+				}
+				else
+				{
+					/*
+					Node[nodeId1].color.x = 1.0;
+					Node[nodeId1].color.y = 1.0;
+					Node[nodeId1].color.z = 1.0;
+					
+					Node[nodeId2].color.x = 1.0;
+					Node[nodeId2].color.y = 0.0;
+					Node[nodeId2].color.z = 1.0;
+					*/
+					
+					for(int i = 0; i < LinksPerNode; i++)
 					{
-						for(int j = 0; j < LinksPerNode; j++)
+						muscleId = ConnectingMuscles[nodeId1*LinksPerNode + i];
+						//printf("\n muscleId = %d\n", muscleId);
+						if(muscleId != -1)
 						{
-							muscleId = ConnectingMuscles[i*LinksPerNode + j];
-							if(muscleId != -1)
+							for(int j = 0; j < LinksPerNode; j++)
 							{
-								Muscle[muscleId].contractionDuration = BaseMuscleContractionDuration;
-								Muscle[muscleId].rechargeDuration = BaseMuscleRechargeDuration;
-								Muscle[muscleId].conductionVelocity = BaseMuscleConductionVelocity;
-								Muscle[muscleId].conductionDuration = Muscle[muscleId].naturalLength/Muscle[muscleId].conductionVelocity;
-								Muscle[muscleId].color.x = 0.0;
-								Muscle[muscleId].color.y = 1.0;
-								Muscle[muscleId].color.z = 0.0;
-								Muscle[muscleId].color.w = 0.0;
-								
-								// Turning the muscle back on if it was dead.
-								Muscle[muscleId].dead = 0;
-								
-								// Checking to see if the muscle needs to be killed.
-								if((Muscle[muscleId].contractionDuration + Muscle[muscleId].rechargeDuration) < Muscle[muscleId].conductionDuration)
+								test = ConnectingMuscles[nodeId2*LinksPerNode + j];
+								//printf("\n test = %d\n", test);
+								if(muscleId == test)
 								{
-								 	printf("\n Conduction duration is shorter than the (contraction plus recharge) duration in muscle number %d", muscleId);
-								 	printf("\n Muscle %d will be killed \n", muscleId);
-								 	Muscle[muscleId].dead = 1;
-								 	Muscle[muscleId].color.x = DeadColor.x;
-									Muscle[muscleId].color.y = DeadColor.y;
-									Muscle[muscleId].color.z = DeadColor.z;
-									Muscle[muscleId].color.w = 1.0;
-								} 
+									connectingMuscle = muscleId;
+								}
 							}
 						}
+					}
+					if(connectingMuscle == -1)
+					{
+						printf("\n No connecting muscle was found try again.\n");
+					}
+					else
+					{
+						muscleId = connectingMuscle;
+						Muscle[muscleId].contractionDuration = BaseMuscleContractionDuration;
+						Muscle[muscleId].rechargeDuration = BaseMuscleRechargeDuration;
+						Muscle[muscleId].conductionVelocity = BaseMuscleConductionVelocity;
+						Muscle[muscleId].conductionDuration = Muscle[muscleId].naturalLength/Muscle[muscleId].conductionVelocity;
+						Muscle[muscleId].color.x = 0.0;
+						Muscle[muscleId].color.y = 1.0;
+						Muscle[muscleId].color.z = 0.0;
+						Muscle[muscleId].color.w = 0.0;
 						
-						Node[i].drawFlag = 1;
-						if(Node[i].ablatedYesNo != 1) // If it is not ablated color it.
+						if((Muscle[muscleId].contractionDuration + Muscle[muscleId].rechargeDuration) < Muscle[muscleId].conductionDuration)
 						{
+						 	printf("\n Conduction duration is shorter than the (contraction plus recharge) duration in muscle number %d", muscleId);
+						 	printf("\n Muscle %d will be killed \n", muscleId);
+						 	Muscle[muscleId].dead = 1;
+						 	Muscle[muscleId].color.x = DeadColor.x;
+							Muscle[muscleId].color.y = DeadColor.y;
+							Muscle[muscleId].color.z = DeadColor.z;
+							Muscle[muscleId].color.w = 1.0;
+						} 			
+					}
+				}
+			}
+			else
+			{
+					
+					
+					
+					
+					
+				for(int i = 0; i < NumberOfNodes; i++)
+				{
+					dx = MouseX - Node[i].position.x;
+					dy = MouseY - Node[i].position.y;
+					dz = MouseZ - Node[i].position.z;
+					if(sqrt(dx*dx + dy*dy + dz*dz) < hit)
+					{
+						if(AblateOnOff == 1)
+						{
+							Node[i].ablatedYesNo = 0;
+							Node[i].drawFlag = 0;
 							Node[i].color.x = 0.0;
 							Node[i].color.y = 1.0;
 							Node[i].color.z = 0.0;
 						}
-					}
-					if(AdjustMuscleLineOnOff == 1)
-					{
-						int nodeId1 = -1;
-						int nodeId2 = -1;
-						int connectingMuscle = -1;
-						int test = -1;
-						float minDistance = 2.0*RadiusOfAtria;
-						for(int i = 0; i < NumberOfNodes; i++)
+						if(AdjustMuscleAreaOnOff == 1)
 						{
-							dx = MouseX - Node[i].position.x;
-							dy = MouseY - Node[i].position.y;
-							dz = MouseZ - Node[i].position.z;
-							d = sqrt(dx*dx + dy*dy + dz*dz);
-							if(d < minDistance)
+							for(int j = 0; j < LinksPerNode; j++)
 							{
-								minDistance = d;
-								nodeId2 = nodeId1;
-								nodeId1 = i;
-							}
-						}
-						
-						if(nodeId2 == -1)
-						{
-							printf("\n Two nodes were not found try again.\n");
-							printf("\n MouseZ = %lf.\n", MouseZ);
-						}
-						else
-						{
-							/*
-							Node[nodeId1].color.x = 1.0;
-							Node[nodeId1].color.y = 1.0;
-							Node[nodeId1].color.z = 1.0;
-							
-							Node[nodeId2].color.x = 1.0;
-							Node[nodeId2].color.y = 0.0;
-							Node[nodeId2].color.z = 1.0;
-							*/
-							
-							for(int i = 0; i < LinksPerNode; i++)
-							{
-								muscleId = ConnectingMuscles[nodeId1*LinksPerNode + i];
-								//printf("\n muscleId = %d\n", muscleId);
+								muscleId = ConnectingMuscles[i*LinksPerNode + j];
 								if(muscleId != -1)
 								{
-									for(int j = 0; j < LinksPerNode; j++)
+									Muscle[muscleId].contractionDuration = BaseMuscleContractionDuration;
+									Muscle[muscleId].rechargeDuration = BaseMuscleRechargeDuration;
+									Muscle[muscleId].conductionVelocity = BaseMuscleConductionVelocity;
+									Muscle[muscleId].conductionDuration = Muscle[muscleId].naturalLength/Muscle[muscleId].conductionVelocity;
+									Muscle[muscleId].color.x = 0.0;
+									Muscle[muscleId].color.y = 1.0;
+									Muscle[muscleId].color.z = 0.0;
+									Muscle[muscleId].color.w = 0.0;
+									
+									// Turning the muscle back on if it was dead.
+									Muscle[muscleId].dead = 0;
+									
+									// Checking to see if the muscle needs to be killed.
+									if((Muscle[muscleId].contractionDuration + Muscle[muscleId].rechargeDuration) < Muscle[muscleId].conductionDuration)
 									{
-										test = ConnectingMuscles[nodeId2*LinksPerNode + j];
-										//printf("\n test = %d\n", test);
-										if(muscleId == test)
-										{
-											connectingMuscle = muscleId;
-										}
-									}
+									 	printf("\n Conduction duration is shorter than the (contraction plus recharge) duration in muscle number %d", muscleId);
+									 	printf("\n Muscle %d will be killed \n", muscleId);
+									 	Muscle[muscleId].dead = 1;
+									 	Muscle[muscleId].color.x = DeadColor.x;
+										Muscle[muscleId].color.y = DeadColor.y;
+										Muscle[muscleId].color.z = DeadColor.z;
+										Muscle[muscleId].color.w = 1.0;
+									} 
 								}
 							}
-							if(connectingMuscle == -1)
+							
+							Node[i].drawFlag = 1;
+							if(Node[i].ablatedYesNo != 1) // If it is not ablated color it.
 							{
-								printf("\n No connecting muscle was found try again.\n");
-							}
-							else
-							{
-								muscleId = connectingMuscle;
-								Muscle[muscleId].contractionDuration = BaseMuscleContractionDuration;
-								Muscle[muscleId].rechargeDuration = BaseMuscleRechargeDuration;
-								Muscle[muscleId].conductionVelocity = BaseMuscleConductionVelocity;
-								Muscle[muscleId].conductionDuration = Muscle[muscleId].naturalLength/Muscle[muscleId].conductionVelocity;
-								Muscle[muscleId].color.x = 0.0;
-								Muscle[muscleId].color.y = 1.0;
-								Muscle[muscleId].color.z = 0.0;
-								Muscle[muscleId].color.w = 0.0;
-								
-								if((Muscle[muscleId].contractionDuration + Muscle[muscleId].rechargeDuration) < Muscle[muscleId].conductionDuration)
-								{
-								 	printf("\n Conduction duration is shorter than the (contraction plus recharge) duration in muscle number %d", muscleId);
-								 	printf("\n Muscle %d will be killed \n", muscleId);
-								 	Muscle[muscleId].dead = 1;
-								 	Muscle[muscleId].color.x = DeadColor.x;
-									Muscle[muscleId].color.y = DeadColor.y;
-									Muscle[muscleId].color.z = DeadColor.z;
-									Muscle[muscleId].color.w = 1.0;
-								} 			
+								Node[i].color.x = 0.0;
+								Node[i].color.y = 1.0;
+								Node[i].color.z = 0.0;
 							}
 						}
 					}
 				}
+				
+			
 			}
+			
 		}
 		else if(button == GLUT_MIDDLE_BUTTON)
 		{
