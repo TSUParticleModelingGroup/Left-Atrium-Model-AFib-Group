@@ -819,7 +819,7 @@ void terminalPrint()
 	printf("\n");
 	printf("\n Set Mouse actions");
 	
-	printf("\n !: Ablate            - ");
+	printf("\n !: Ablate                  - ");
 	if (AblateOnOff == 1) 
 	{
 		printf("\033[0;36m");
@@ -827,7 +827,7 @@ void terminalPrint()
 	}
 	else printf(BOLD_ON "Off" BOLD_OFF);
 	
-	printf("\n @: Ectoic Beat       - ");
+	printf("\n @: Ectoic Beat             - ");
 	if (EctopicBeatOnOff == 1) 
 	{
 		printf("\033[0;36m");
@@ -835,7 +835,7 @@ void terminalPrint()
 	}
 	else printf(BOLD_ON "Off" BOLD_OFF);
 	
-	printf("\n #: Ectopic Trigger   - ");
+	printf("\n #: Ectopic Trigger         - ");
 	if (EctopicSingleOnOff == 1) 
 	{
 		printf("\033[0;36m");
@@ -843,7 +843,7 @@ void terminalPrint()
 	}
 	else printf(BOLD_ON "Off" BOLD_OFF);
 	
-	printf("\n $: Muscle Adjustment Area - ");
+	printf("\n $: Muscle Adjustment Area  - ");
 	if (AdjustMuscleAreaOnOff == 1) 
 	{
 		printf("\033[0;36m");
@@ -851,7 +851,7 @@ void terminalPrint()
 	}
 	else printf(BOLD_ON "Off" BOLD_OFF);
 	
-	printf("\n $: Muscle Adjustment Line - ");
+	printf("\n &: Muscle Adjustment Line  - ");
 	if (AdjustMuscleLineOnOff == 1) 
 	{
 		printf("\033[0;36m");
@@ -859,7 +859,7 @@ void terminalPrint()
 	}
 	else printf(BOLD_ON "Off" BOLD_OFF);
 	
-	printf("\n ^: Identify Node     - ");
+	printf("\n ^: Identify Node           - ");
 	if (FindNodeOnOff == 1) 
 	{
 		printf("\033[0;36m");
