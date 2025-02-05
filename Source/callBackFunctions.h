@@ -1312,12 +1312,7 @@ void mymouse(int button, int state, int x, int y)
 				}
 			}
 			else
-			{
-					
-					
-					
-					
-					
+			{	
 				for(int i = 0; i < NumberOfNodes; i++)
 				{
 					dx = MouseX - Node[i].position.x;
@@ -1376,8 +1371,6 @@ void mymouse(int button, int state, int x, int y)
 						}
 					}
 				}
-				
-			
 			}
 			
 		}
